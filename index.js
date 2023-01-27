@@ -1,11 +1,10 @@
 import axios from 'axios'
-import { Toast } from 'vant'
 import { BASE_URL, TIMEOUT } from './config'
-import LocalCache from '@/utils/cache'
-import router from '@/router'
-import useMainStore from '@/store/modules/main'
-
-const mainStore = useMainStore()
+//本地缓存
+//import LocalCache from '@/utils/cache'
+//loading
+//import useMainStore from '@/store/modules/main'
+//const mainStore = useMainStore()
 
 class ZXRequest {
     constructor(baseURL, timeout = 10000) {
@@ -16,11 +15,13 @@ class ZXRequest {
 
         this.instance.interceptors.request.use(
             (config) => {
-                mainStore.isLoading = true
-                const token = LocalCache.getCache('token')
-                if (token) {
-                    config.headers.Authorization = `Bearer ${token}`
-                }
+                //loading
+//                 mainStore.isLoading = true
+                //token
+//                 const token = LocalCache.getCache('token')
+//                 if (token) {
+//                     config.headers.Authorization = `Bearer ${token}`
+//                 }
                 return config
             },
             (err) => {
@@ -29,34 +30,36 @@ class ZXRequest {
         )
         this.instance.interceptors.response.use(
             (res) => {
+                //loading
                 mainStore.isLoading = false
                 const code = res.data.code
                 // 正确情况下
-                if (code == 200) {
-                    return res
-                } else if (code == 400) {
-                    Toast({
-                        message: res.data.msg,
-                        position: 'bottom',
-                    })
-                } else if (code == 401) {
-                    // token过期状态
-                    // ElMessage.success('你的用户信息已过期，请重新登录！')
-                    //  message.success('你的用户信息已过期，请重新登录！')
-                    LocalCache.deleteCache('userInfo')
-                    // 跳转登录页
-                    router.push({
-                        name: 'login',
-                        query: {
-                            redirect: router.currentRoute.value.fullPath,
-                        },
-                    })
-                    return Promise.reject(res)
-                } else {
-                    // 其他错误状态
-                    // ElMessage.error(res.data.msg || '请求数据失败！请稍后再试！')
-                    return Promise.reject(res.data)
-                }
+                //判断后端返回的状态码
+//                 if (code == 200) {
+//                     return res
+//                 } else if (code == 400) {
+//                     Toast({
+//                         message: res.data.msg,
+//                         position: 'bottom',
+//                     })
+//                 } else if (code == 401) {
+//                     // token过期状态
+//                     // ElMessage.success('你的用户信息已过期，请重新登录！')
+//                     //  message.success('你的用户信息已过期，请重新登录！')
+//                     LocalCache.deleteCache('userInfo')
+//                     // 跳转登录页
+//                     router.push({
+//                         name: 'login',
+//                         query: {
+//                             redirect: router.currentRoute.value.fullPath,
+//                         },
+//                     })
+//                     return Promise.reject(res)
+//                 } else {
+//                     // 其他错误状态
+//                     // ElMessage.error(res.data.msg || '请求数据失败！请稍后再试！')
+//                     return Promise.reject(res.data)
+//                 }
             },
             (err) => {
                 mainStore.isLoading = false
