@@ -31,8 +31,8 @@ class ZXRequest {
         this.instance.interceptors.response.use(
             (res) => {
                 //loading
-                mainStore.isLoading = false
-                const code = res.data.code
+                //mainStore.isLoading = false
+                //const code = res.data.code
                 // 正确情况下
                 //判断后端返回的状态码
 //                 if (code == 200) {
